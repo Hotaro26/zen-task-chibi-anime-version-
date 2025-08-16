@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+    
+Green Glass Productivity</title><link rel="icon" type="image/png" href="chibi.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+            color: #e8e8e8;
+            font-weight: 400;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(34, 139, 34, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 100, 0, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        /* Fullscreen Background Overlay */
+        .fullscreen-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            z-index: 5;
+            display: none;
+        }
+
+        /* Keep container layout preserved in fullscreen */
+        .fullscreen .container {
+            max-width: 900px;
+            padding: 15px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hide title and subtitle in fullscreen but keep greeting visible */
+        .fullscreen .app-title,
+        .fullscreen .app-subtitle {
+            display: none !important;
+        }
+
+        .fullscreen .user-greeting {
+            display: block !important;
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .fullscreen .header {
+            margin-bottom: 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .app-title {
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 20px rgba(34, 139, 34, 0.2);
+            letter-spacing: -0.02em;
+        }
+
+        .app-subtitle {
+            color: #b8b8b8;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .user-greeting {
+            color: #90EE90;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            color: #d0d0d0;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-2px);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-btn.active {
+            background: rgba(34, 139, 34, 0.15);
+            border-color: rgba(34, 139, 34, 0.3);
+            color: #90EE90;
+            box-shadow: 
+                inset 0 1px 0 rgba(34, 139, 34, 0.2),
+                0 4px 20px rgba(34, 139, 34, 0.2);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 10px 40px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.005) 100%);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Compact timer card similar to todo card */
+        #pomodoro .glass-card {
+            padding: 2rem;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .todo-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            color: #e8e8e8;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-input::placeholder {
+            color: #888888;
+            font-weight: 400;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(34, 139, 34, 0.4);
+            transform: scale(1.01);
+            box-shadow: 
+                inset 0 2px 5px rgba(0, 0, 0, 0.3),
+                0 0 0 3px rgba(34, 139, 34, 0.1);
+        }
+
+        .add-btn {
+            padding: 16px 28px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(34, 139, 34, 0.15);
+            color: #90EE90;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 139, 34, 0.25);
+            min-width: 120px;
+            box-shadow: 
+                inset 0 1px 0 rgba(34, 139, 34, 0.2),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.01em;
+        }
+
+        .add-btn:hover {
+            background: rgba(34, 139, 34, 0.2);
+            transform: scale(1.03);
+            box-shadow: 
+                inset 0 1px 0 rgba(34, 139, 34, 0.3),
+                0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Task Sections */
+        .task-section {
+            margin-bottom: 2rem;
+        }
+
+        .task-section-title {
+            color: #90EE90;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .task-count {
+            background: rgba(34, 139, 34, 0.2);
+            color: #90EE90;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .clear-completed {
+            margin-left: auto;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(139, 34, 34, 0.15);
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 34, 34, 0.25);
+        }
+
+        .clear-completed:hover {
+            background: rgba(139, 34, 34, 0.25);
+            transform: scale(1.05);
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.02),
+                0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(8px);
+            border-color: rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.04),
+                0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            transform: scale(0.97);
+        }
+
+        .todo-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(34, 139, 34, 0.6);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-checkbox.checked {
+            background: rgba(34, 139, 34, 0.8);
+            border-color: #228B22;
+            box-shadow: 
+                inset 0 2px 5px rgba(0, 0, 0, 0.3),
+                0 0 10px rgba(34, 139, 34, 0.3);
+        }
+
+        .todo-checkbox.checked::after {
+            content: '✓';
+            color: #000;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .todo-text {
+            flex: 1;
+            color: #e8e8e8;
+            font-size: 1rem;
+            font-weight: 400;
+            word-break: break-word;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .delete-btn {
+            background: rgba(139, 34, 34, 0.15);
+            color: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            border: 1px solid rgba(139, 34, 34, 0.25);
+            box-shadow: inset 0 1px 0 rgba(139, 34, 34, 0.2);
+        }
+
+        .delete-btn:hover {
+            background: rgba(139, 34, 34, 0.25);
+            transform: scale(1.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: #b8b8b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            padding: 0 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #888888;
+            font-style: italic;
+            padding: 3rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Pomodoro Timer Styles */
+        .timer-container {
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 3.8rem;
+            font-weight: 300;
+            color: #90EE90;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-shadow: 0 0 30px rgba(34, 139, 34, 0.3);
+            letter-spacing: 0.1em;
+        }
+
+        .timer-label {
+            font-size: 1.2rem;
+            color: #d0d0d0;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .timer-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(34, 139, 34, 0.12);
+            color: #90EE90;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 139, 34, 0.2);
+            min-width: 100px;
+            box-shadow: 
+                inset 0 1px 0 rgba(34, 139, 34, 0.15),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.01em;
+        }
+
+        .timer-btn:hover {
+            background: rgba(34, 139, 34, 0.18);
+            transform: scale(1.05);
+        }
+
+        .timer-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .timer-btn.active {
+            background: rgba(34, 139, 34, 0.25);
+            border-color: rgba(34, 139, 34, 0.4);
+        }
+
+        .timer-presets {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            color: #b8b8b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .preset-btn.active {
+            background: rgba(34, 139, 34, 0.15);
+            color: #90EE90;
+            border-color: rgba(34, 139, 34, 0.25);
+        }
+
+        .custom-timer {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .custom-input {
+            width: 70px;
+            padding: 8px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #e8e8e8;
+            text-align: center;
+            font-size: 0.95rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        .custom-input::-webkit-outer-spin-button,
+        .custom-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: rgba(34, 139, 34, 0.4);
+        }
+
+        .custom-label {
+            color: #b8b8b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .set-custom-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(34, 139, 34, 0.12);
+            color: #90EE90;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 139, 34, 0.2);
+        }
+
+        .set-custom-btn:hover {
+            background: rgba(34, 139, 34, 0.18);
+        }
+
+        /* Smaller, flowy progress bar */
+        .timer-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1.2rem;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .timer-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .timer-progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #228B22, #32CD32, #90EE90, #32CD32, #228B22);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+            width: 0%;
+            position: relative;
+            overflow: hidden;
+            animation: flowingGradient 3s ease-in-out infinite;
+        }
+
+        .timer-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .timer-running .timer-progress-bar {
+            animation: flowingGradient 2s ease-in-out infinite, pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes flowingGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .session-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.8rem;
+            color: #b8b8b8;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 1.2rem;
+            text-align: center;
+        }
+
+        /* Compact capsule container - fullscreen only */
+        .capsule-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(34, 139, 34, 0.15);
+            border-radius: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            z-index: 1300;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .capsule-container:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .toggle-btn {
+            background: transparent;
+            color: #90EE90;
+            border: none;
+            padding: 8px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            color: #ffffff;
+            background: rgba(34, 139, 34, 0.2);
+            transform: scale(1.1);
+        }
+
+        .toggle-btn#fullscreenToggleBtn::before {
+            content: "⛶";
+        }
+
+        /* Plain transparent chibi images without any box/border */
+        .images-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1200;
+            transition: all 0.4s ease;
+        }
+
+        .images-container:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .images-container img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: none;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .images-container img:hover {
+            transform: scale(1.15) translateY(-10px) rotate(-3deg);
+            filter: drop-shadow(0 15px 30px rgba(34, 139, 34, 0.6));
+        }
+
+        /* Welcome Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.4s ease;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .modal-subtitle {
+            color: #b8b8b8;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8e8e8;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(34, 139, 34, 0.5);
+            box-shadow: 0 0 0 3px rgba(34, 139, 34, 0.1);
+        }
+
+        .modal-input::placeholder {
+            color: #888888;
+        }
+
+        .modal-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(34, 139, 34, 0.2);
+            color: #90EE90;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 139, 34, 0.3);
+            letter-spacing: 0.01em;
+        }
+
+        .modal-btn:hover {
+            background: rgba(34, 139, 34, 0.3);
+            transform: scale(1.05);
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Glass Morphed Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(34, 139, 34, 0.1);
+            backdrop-filter: blur(20px);
+            color: #90EE90;
+            padding: 16px 24px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(34, 139, 34, 0.2);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: all 0.4s ease;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            max-width: 380px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: rgba(139, 34, 34, 0.1);
+            border-color: rgba(139, 34, 34, 0.2);
+            color: #ff9999;
+        }
+
+        .toast.motivational {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+        }
+
+        .toast-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .toast-message {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: currentColor;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        /* Completion Effects */
+        .completion-effect {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2.5rem;
+            z-index: 999;
+            animation: floatUp 3s ease-out forwards;
+        }
+
+        .emoji-bunch {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .emoji-bunch .completion-effect {
+            position: absolute;
+            animation: explode 2.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: var(--target-pos) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: var(--target-pos) scale(0.8);
+            }
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .timer-running .timer-display {
+            animation: pulse 3s infinite;
+        }
+
+        /* Enhanced Responsive Design - Super flexible for all screens */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 95%;
+                padding: 0 20px;
+            }
+
+            #pomodoro .glass-card {
+                max-width: 480px;
+            }
+
+            .images-container img {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            .fullscreen .container {
+                padding: 15px;
+            }
+
+            .glass-card {
+                padding: 2rem;
+            }
+
+            #pomodoro .glass-card {
+                max-width: 450px;
+                padding: 1.8rem;
+            }
+
+            .timer-display {
+                font-size: 3.5rem;
+            }
+
+            .toast-container {
+                right: 15px;
+                left: 15px;
+            }
+
+            .toast {
+                max-width: none;
+            }
+
+            .images-container img {
+                width: 160px;
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .fullscreen .container {
+                padding: 12px;
+            }
+
+            .app-title {
+                font-size: 2.5rem;
+            }
+
+            .glass-card {
+                padding: 1.8rem;
+                border-radius: 20px;
+            }
+
+            #pomodoro .glass-card {
+                max-width: 100%;
+                padding: 1.5rem;
+            }
+
+            .input-section {
+                flex-direction: column;
+            }
+
+            .todo-input {
+                min-width: 100%;
+                margin-bottom: 12px;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+            .todo-item {
+                padding: 16px;
+                flex-wrap: wrap;
+            }
+
+            .timer-display {
+                font-size: 3.2rem;
+                margin: 1.8rem 0;
+            }
+
+            .timer-label {
+                font-size: 1.1rem;
+                margin-bottom: 1.3rem;
+                letter-spacing: 2px;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+                margin-bottom: 2rem;
+            }
+
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .timer-btn {
+                width: 100%;
+                max-width: 280px;
+                padding: 11px 20px;
+                font-size: 0.9rem;
+            }
+
+            .timer-presets {
+                gap: 0.6rem;
+                margin-bottom: 1.3rem;
+            }
+
+            .preset-btn {
+                padding: 7px 14px;
+                font-size: 0.8rem;
+            }
+
+            .custom-timer {
+                flex-direction: column;
+                gap: 0.8rem;
+                margin-bottom: 1.3rem;
+            }
+
+            .custom-input {
+                width: 65px;
+                font-size: 0.9rem;
+            }
+
+            .session-info {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            .timer-progress {
+                height: 6px;
+                margin-bottom: 1rem;
+            }
+
+            .toast-container {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+            }
+
+            .modal {
+                padding: 2rem;
+            }
+
+            .modal-title {
+                font-size: 1.8rem;
+            }
+
+            .task-section-title {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+                font-size: 1.2rem;
+            }
+
+            .clear-completed {
+                margin-left: 0;
+            }
+
+            .capsule-container {
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .images-container {
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .images-container img {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .fullscreen .container {
+                padding: 8px;
+            }
+
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .app-subtitle {
+                font-size: 1rem;
+            }
+
+            .fullscreen .user-greeting {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+                border-radius: 18px;
+            }
+
+            #pomodoro .glass-card {
+                padding: 1.3rem;
+            }
+
+            .todo-item {
+                padding: 14px;
+                border-radius: 15px;
+            }
+
+            .timer-display {
+                font-size: 2.8rem;
+                margin: 1.5rem 0;
+            }
+
+            .timer-label {
+                font-size: 1rem;
+                letter-spacing: 2px;
+                margin-bottom: 1.2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .nav-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .nav-buttons {
+                margin-bottom: 1.5rem;
+            }
+
+            .timer-btn {
+                max-width: 260px;
+                padding: 10px 18px;
+                font-size: 0.85rem;
+            }
+
+            .timer-controls {
+                gap: 0.7rem;
+            }
+
+            .custom-input {
+                width: 60px;
+                padding: 7px;
+                font-size: 0.85rem;
+            }
+
+            .custom-label {
+                font-size: 0.8rem;
+            }
+
+            .set-custom-btn {
+                padding: 7px 14px;
+                font-size: 0.8rem;
+            }
+
+            .task-section-title {
+                font-size: 1.1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .modal {
+                padding: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.6rem;
+            }
+
+            .timer-progress {
+                height: 5px;
+            }
+
+            .session-info {
+                font-size: 0.8rem;
+            }
+
+            .capsule-container {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .images-container {
+                bottom: 10px;
+                left: 10px;
+            }
+
+            .images-container img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 0 6px;
+            }
+
+            .fullscreen .container {
+                padding: 6px;
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+            }
+
+            .glass-card {
+                padding: 1.2rem;
+            }
+
+            #pomodoro .glass-card {
+                padding: 1.1rem;
+            }
+
+            .timer-display {
+                font-size: 2.4rem;
+                margin: 1.3rem 0;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.6rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 220px;
+                padding: 9px 14px;
+                font-size: 0.85rem;
+            }
+
+            .timer-btn {
+                max-width: 240px;
+                padding: 9px 16px;
+            }
+
+            .preset-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .custom-input {
+                width: 55px;
+            }
+
+            .images-container img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        /* Extra large screens */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1000px;
+            }
+
+            #pomodoro .glass-card {
+                max-width: 550px;
+            }
+
+            .timer-display {
+                font-size: 4.2rem;
+            }
+
+            .images-container img {
+                width: 220px;
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fullscreen Background Overlay -->
+    <div class="fullscreen-bg" id="fullscreenBg"></div>
+
+    <!-- Welcome Modal -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal">
+            <h2 class="modal-title">🌿 Welcome to Green Glass</h2>
+            <p class="modal-subtitle">Let's personalize your productivity experience! What should we call you?</p>
+            <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." maxlength="20">
+            <button class="modal-btn" id="startBtn" onclick="setUserName()">Start Your Journey</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="app-title">🌿 Green Glass Productivity</h1>
+            <p class="app-subtitle">Minimalist task management with focus sessions</p>
+            <p class="user-greeting" id="userGreeting" style="display: none;"></p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('todo')">📝 Todo List</button>
+            <button class="nav-btn" onclick="showSection('pomodoro')">🍅 Focus Timer</button>
+        </div>
+
+        <!-- Todo Section -->
+        <div id="todo" class="section active">
+            <div class="glass-card">
+                <div class="input-section">
+                    <input type="text" class="todo-input" placeholder="Add a new task..." id="todoInput">
+                    <button class="add-btn" onclick="addTodo()">Add Task</button>
+                </div>
+
+                <!-- Pending Tasks Section -->
+                <div class="task-section" id="pendingSection">
+                    <div class="task-section-title" id="pendingTitle">
+                        📋 Pending Tasks <span class="task-count" id="pendingCount">0</span>
+                    </div>
+                    <ul class="todo-list" id="pendingList">
+                        <!-- Pending todos will be dynamically added here -->
+                    </ul>
+                </div>
+
+                <!-- Completed Tasks Section -->
+                <div class="task-section" id="completedSection" style="display: none;">
+                    <div class="task-section-title" id="completedTitle">
+                        ✅ Completed Tasks 
+                        <span class="task-count" id="completedCount">0</span>
+                        <button class="clear-completed" onclick="clearCompleted()">Clear All</button>
+                    </div>
+                    <ul class="todo-list" id="completedList">
+                        <!-- Completed todos will be dynamically added here -->
+                    </ul>
+                </div>
+
+                <div class="stats">
+                    <span id="totalTasks">Total: 0</span>
+                    <span id="completedTasks">Completed: 0</span>
+                    <span id="pendingTasks">Pending: 0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pomodoro Section -->
+        <div id="pomodoro" class="section">
+            <div class="glass-card">
+                <div class="timer-container">
+                    <div class="timer-label" id="timerLabel">Focus Session</div>
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                    
+                    <div class="timer-progress">
+                        <div class="timer-progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <div class="timer-presets">
+                        <button class="preset-btn active" onclick="setTimer(25, 'Focus Session')">25min Focus</button>
+                        <button class="preset-btn" onclick="setTimer(5, 'Short Break')">5min Break</button>
+                        <button class="preset-btn" onclick="setTimer(15, 'Long Break')">15min Break</button>
+                        <button class="preset-btn" onclick="setTimer(50, 'Deep Work')">50min Deep</button>
+                    </div>
+
+                    <div class="custom-timer">
+                        <span class="custom-label">Custom:</span>
+                        <input type="text" class="custom-input" id="customMinutes" placeholder="25" maxlength="3">
+                        <span class="custom-label">minutes</span>
+                        <button class="set-custom-btn" onclick="setCustomTimer()">Set Timer</button>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button class="timer-btn" id="startTimerBtn" onclick="startTimer()">Start</button>
+                        <button class="timer-btn" id="pauseBtn" onclick="pauseTimer()" disabled>Pause</button>
+                        <button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+                    </div>
+
+                    <div class="session-info">
+                        <span id="sessionCount">Sessions: 0</span>
+                        <span id="totalTime">Total: 0h 0m</span>
+                        <span id="currentStreak">Streak: 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compact Capsule Container - Fullscreen Only -->
+    <div class="capsule-container">
+        <button class="toggle-btn" id="fullscreenToggleBtn" aria-label="Toggle fullscreen"></button>
+    </div>
+
+    <!-- Plain Transparent Chibi Images -->
+    <div class="images-container">
+        <img src="image1.png" alt="Chibi Image 1" id="img1">
+        <img src="image2.png" alt="Chibi Image 2" id="img2" style="display:none;">
+        <img src="image3.png" alt="Chibi Image 3" id="img3" style="display:none;">
+        <img src="image4.png" alt="Chibi Image 4" id="img4" style="display:none;">
+        <img src="image5.png" alt="Chibi Image 5" id="img5" style="display:none;">
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // User data
+        let userData = {
+            name: localStorage.getItem('userName') || null
+        };
+
+        // Todo functionality
+        let todos = JSON.parse(localStorage.getItem('greenGlassTodos')) || [];
+        let todoIdCounter = Date.now();
+
+        // Timer functionality
+        let timerState = {
+            minutes: 25,
+            seconds: 0,
+            isRunning: false,
+            isPaused: false,
+            interval: null,
+            totalMinutes: 25,
+            sessions: parseInt(localStorage.getItem('pomodoroSessions')) || 0,
+            totalMinutesWorked: parseInt(localStorage.getItem('totalMinutesWorked')) || 0,
+            currentStreak: parseInt(localStorage.getItem('currentStreak')) || 0
+        };
+
+        // Motivational toast system
+        let motivationalTimer = null;
+        const motivationalMessages = [
+            "Keep pushing forward! 💪",
+            "Stay focused, you're doing great! 🎯",
+            "Take it one step at a time! ✨",
+            "You got this! Keep up the good work! 🚀",
+            "Believe in yourself! 💖",
+            "Success is near, keep going! 🌟",
+            "Every small step counts! 👣",
+            "Progress over perfection! 🏆",
+            "You're unstoppable! 💥",
+            "Stay committed to your goals! 🎪"
+        ];
+
+        // Fullscreen toggle button integration
+        const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+        fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
+
+        // Fixed Image cycling logic 
+        const images = [
+            document.getElementById('img1'),
+            document.getElementById('img2'),
+            document.getElementById('img3'),
+            document.getElementById('img4'),
+            document.getElementById('img5')
+        ];
+
+        let currentImageIndex = 0;
+
+        function cycleImages() {
+            // Hide all images
+            images.forEach(img => img.style.display = 'none');
+            // Move to next image
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            // Show current image
+            images[currentImageIndex].style.display = 'block';
+        }
+
+        // Initialize: Hide all images first, then show the first one
+        images.forEach(img => img.style.display = 'none');
+        images[0].style.display = 'block';
+
+        // Start cycling every 60 seconds
+        setInterval(cycleImages, 60000);
+
+        // Initialize app
+        function initializeApp() {
+            if (userData.name) {
+                document.getElementById('welcomeModal').style.display = 'none';
+                showUserGreeting();
+            }
+            renderTodos();
+            updateTimerDisplay();
+            updateSessionInfo();
+            startMotivationalToasts();
+        }
+
+        function setUserName() {
+            const nameInput = document.getElementById('userNameInput');
+            const name = nameInput.value.trim();
+            
+            if (name === '') {
+                showToast('Please enter your name!', 'error', '⚠️');
+                return;
+            }
+
+            userData.name = name;
+            localStorage.setItem('userName', name);
+            
+            document.getElementById('welcomeModal').style.display = 'none';
+            showUserGreeting();
+            showToast(`Welcome aboard, ${name}! 🎉`, 'success', '👋');
+        }
+
+        function showUserGreeting() {
+            const greeting = document.getElementById('userGreeting');
+            const currentHour = new Date().getHours();
+            let timeGreeting;
+            
+            if (currentHour < 12) {
+                timeGreeting = 'Good morning';
+            } else if (currentHour < 17) {
+                timeGreeting = 'Good afternoon';
+            } else {
+                timeGreeting = 'Good evening';
+            }
+            
+            greeting.textContent = `${timeGreeting}, ${userData.name}! Ready to be productive?`;
+            greeting.style.display = 'block';
+        }
+
+        // Fullscreen functionality - Preserve layout, extend background only
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    document.body.classList.add('fullscreen');
+                    document.getElementById('fullscreenBg').style.display = 'block';
+                    showToast('Entered focus mode! 🎯', 'success', '🎯');
+                }).catch(err => {
+                    showToast('Fullscreen not supported', 'error', '⚠️');
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    document.body.classList.remove('fullscreen');
+                    document.getElementById('fullscreenBg').style.display = 'none';
+                    showToast('Exited focus mode', 'success', '↩️');
+                });
+            }
+        }
+
+        // Listen for fullscreen changes
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                document.body.classList.remove('fullscreen');
+                document.getElementById('fullscreenBg').style.display = 'none';
+            }
+        });
+
+        // Motivational toast system
+        function startMotivationalToasts() {
+            motivationalTimer = setInterval(() => {
+                const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                const personalizedMessage = userData.name ? 
+                    `${randomMessage.split('!')[0]}, ${userData.name}!${randomMessage.includes('💪') ? ' 💪' : randomMessage.slice(-2)}` : 
+                    randomMessage;
+                showToast(personalizedMessage, 'motivational', '🌟');
+            }, 600000); // 10 minutes = 600,000ms
+        }
+
+        // Toast and Effects functionality
+        function showToast(message, type = 'success', icon = '✅') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto remove after 5 seconds for motivational, 4 for others
+            const duration = type === 'motivational' ? 6000 : 4000;
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+
+        function createCompletionEffect(x, y) {
+            const emojis = ['🎉', '✨', '🌟', '💫', '🎊', '🙌', '👏', '🔥'];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const effect = document.createElement('div');
+            effect.className = 'completion-effect';
+            effect.textContent = emoji;
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            
+            document.body.appendChild(effect);
+            
+            // Remove after animation
+            setTimeout(() => effect.remove(), 2000);
+        }
+
+        function createEmojiBunch() {
+            const emojis = ['🎉', '✨', '🌟', '💫', '🎊', '🙌', '👏', '🔥', '🚀', '⭐'];
+            const bunchContainer = document.createElement('div');
+            bunchContainer.className = 'emoji-bunch';
+            
+            // Create multiple emojis in a bunch
+            for (let i = 0; i < 8; i++) {
+                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                const effect = document.createElement('div');
+                effect.className = 'completion-effect';
+                effect.textContent = emoji;
+                
+                // Calculate random position in a circle around center
+                const angle = (i / 8) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+                const distance = 80 + Math.random() * 40;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                effect.style.setProperty('--target-pos', `translate(${x}px, ${y}px)`);
+                bunchContainer.appendChild(effect);
+            }
+            
+            document.body.appendChild(bunchContainer);
+            
+            // Remove after animation
+            setTimeout(() => bunchContainer.remove(), 2500);
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Todo Functions
+        function saveTodos() {
+            localStorage.setItem('greenGlassTodos', JSON.stringify(todos));
+        }
+
+        function renderTodos() {
+            const pendingList = document.getElementById('pendingList');
+            const completedList = document.getElementById('completedList');
+            const pendingSection = document.getElementById('pendingSection');
+            const completedSection = document.getElementById('completedSection');
+            
+            // Clear both lists
+            pendingList.innerHTML = '';
+            completedList.innerHTML = '';
+            
+            // Separate todos
+            const pendingTodos = todos.filter(todo => !todo.completed);
+            const completedTodos = todos.filter(todo => todo.completed);
+            
+            // Update section visibility and counts
+            if (pendingTodos.length === 0) {
+                pendingList.innerHTML = `<li class="empty-state">No pending tasks${userData.name ? `, ${userData.name}` : ''}! 🎯</li>`;
+            } else {
+                pendingTodos.forEach(todo => {
+                    const li = createTodoElement(todo);
+                    pendingList.appendChild(li);
+                });
+            }
+            
+            // Show/hide completed section
+            if (completedTodos.length === 0) {
+                completedSection.style.display = 'none';
+            } else {
+                completedSection.style.display = 'block';
+                completedTodos.forEach(todo => {
+                    const li = createTodoElement(todo);
+                    completedList.appendChild(li);
+                });
+            }
+            
+            // Update counts
+            document.getElementById('pendingCount').textContent = pendingTodos.length;
+            document.getElementById('completedCount').textContent = completedTodos.length;
+            
+            updateStats();
+        }
+
+        function createTodoElement(todo) {
+            const li = document.createElement('li');
+            li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+            li.innerHTML = `
+                <div class="todo-checkbox ${todo.completed ? 'checked' : ''}" onclick="toggleTodo(${todo.id})"></div>
+                <span class="todo-text ${todo.completed ? 'completed' : ''}">${escapeHtml(todo.text)}</span>
+                <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+            `;
+            return li;
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+
+            if (text === '') {
+                showToast('Please enter a task!', 'error', '⚠️');
+                return;
+            }
+
+            todos.push({
+                id: todoIdCounter++,
+                text: text,
+                completed: false,
+                createdAt: new Date().toISOString()
+            });
+
+            input.value = '';
+            saveTodos();
+            renderTodos();
+            showToast(`Task added successfully${userData.name ? `, ${userData.name}` : ''}!`, 'success', '➕');
+        }
+
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                saveTodos();
+                renderTodos();
+                
+                if (todo.completed) {
+                    // Create completion effect at center of screen
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    createCompletionEffect(centerX, centerY);
+                    showToast(`Awesome work${userData.name ? `, ${userData.name}` : ''}! Task completed! 🎉`, 'success', '🎉');
+                } else {
+                    showToast('Task marked as pending', 'success', '🔄');
+                }
+            }
+        }
+
+        function deleteTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo && confirm('Are you sure you want to delete this task?')) {
+                todos = todos.filter(t => t.id !== id);
+                saveTodos();
+                renderTodos();
+                showToast('Task deleted', 'success', '🗑️');
+            }
+        }
+
+        function clearCompleted() {
+            const completedCount = todos.filter(t => t.completed).length;
+            
+            if (completedCount === 0) return;
+            
+            if (confirm(`Are you sure you want to clear all ${completedCount} completed tasks?`)) {
+                todos = todos.filter(t => !t.completed);
+                saveTodos();
+                renderTodos();
+                showToast(`Cleared ${completedCount} completed tasks!`, 'success', '🧹');
+            }
+        }
+
+        function updateStats() {
+            const total = todos.length;
+            const completed = todos.filter(t => t.completed).length;
+            const pending = total - completed;
+
+            document.getElementById('totalTasks').textContent = `Total: ${total}`;
+            document.getElementById('completedTasks').textContent = `Completed: ${completed}`;
+            document.getElementById('pendingTasks').textContent = `Pending: ${pending}`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Timer Functions
+        function updateTimerDisplay() {
+            const minutes = String(timerState.minutes).padStart(2, '0');
+            const seconds = String(timerState.seconds).padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
+            
+            // Update progress bar
+            const totalSeconds = timerState.totalMinutes * 60;
+            const currentSeconds = (timerState.minutes * 60) + timerState.seconds;
+            const progress = ((totalSeconds - currentSeconds) / totalSeconds) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function setTimer(minutes, label) {
+            if (timerState.isRunning) {
+                showToast('Please stop the current timer first', 'error', '⏰');
+                return;
+            }
+            
+            timerState.minutes = minutes;
+            timerState.seconds = 0;
+            timerState.totalMinutes = minutes;
+            
+            document.getElementById('timerLabel').textContent = label;
+            updateTimerDisplay();
+            
+            // Update preset button states
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            showToast(`Timer set to ${minutes} minutes`, 'success', '⏰');
+        }
+
+        function setCustomTimer() {
+            const customInput = document.getElementById('customMinutes');
+            const customMinutes = parseInt(customInput.value);
+            
+            if (!customMinutes || customMinutes < 1 || customMinutes > 180) {
+                showToast('Please enter a valid time between 1-180 minutes', 'error', '⚠️');
+                return;
+            }
+
+            if (timerState.isRunning) {
+                showToast('Please stop the current timer first', 'error', '⏰');
+                return;
+            }
+
+            timerState.minutes = customMinutes;
+            timerState.seconds = 0;
+            timerState.totalMinutes = customMinutes;
+            
+            document.getElementById('timerLabel').textContent = `Custom ${customMinutes}min`;
+            updateTimerDisplay();
+            
+            // Remove active class from preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Clear the input
+            customInput.value = '';
+            
+            showToast(`Custom timer set to ${customMinutes} minutes`, 'success', '⚙️');
+        }
+
+        function startTimer() {
+            if (timerState.isRunning) return;
+            
+            timerState.isRunning = true;
+            timerState.isPaused = false;
+            
+            document.getElementById('startTimerBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.body.classList.add('timer-running');
+            
+            showToast(`Timer started! Stay focused${userData.name ? `, ${userData.name}` : ''}!`, 'success', '🚀');
+            
+            timerState.interval = setInterval(() => {
+                if (timerState.seconds === 0) {
+                    if (timerState.minutes === 0) {
+                        // Timer finished
+                        completeSession();
+                        return;
+                    }
+                    timerState.minutes--;
+                    timerState.seconds = 59;
+                } else {
+                    timerState.seconds--;
+                }
+                
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!timerState.isRunning) return;
+            
+            timerState.isRunning = false;
+            timerState.isPaused = true;
+            
+            clearInterval(timerState.interval);
+            
+            document.getElementById('startTimerBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.body.classList.remove('timer-running');
+            
+            showToast('Timer paused', 'success', '⏸️');
+        }
+
+        function resetTimer() {
+            timerState.isRunning = false;
+            timerState.isPaused = false;
+            
+            clearInterval(timerState.interval);
+            
+            timerState.minutes = timerState.totalMinutes;
+            timerState.seconds = 0;
+            
+            updateTimerDisplay();
+            
+            document.getElementById('startTimerBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.body.classList.remove('timer-running');
+            
+            showToast('Timer reset', 'success', '🔄');
+        }
+
+        function completeSession() {
+            timerState.isRunning = false;
+            clearInterval(timerState.interval);
+            
+            // Update statistics
+            timerState.sessions++;
+            timerState.totalMinutesWorked += timerState.totalMinutes;
+            timerState.currentStreak++;
+            
+            // Save to localStorage
+            localStorage.setItem('pomodoroSessions', timerState.sessions);
+            localStorage.setItem('totalMinutesWorked', timerState.totalMinutesWorked);
+            localStorage.setItem('currentStreak', timerState.currentStreak);
+            
+            updateSessionInfo();
+            
+            // Create emoji bunch effect
+            createEmojiBunch();
+            
+            // Reset timer
+            resetTimer();
+            
+            // Show completion notification with user name
+            showToast(`🎉 Outstanding${userData.name ? `, ${userData.name}` : ''}! Session completed! Keep it up! 🏆`, 'success', '🏆');
+            
+            document.body.classList.remove('timer-running');
+        }
+
+        function updateSessionInfo() {
+            const hours = Math.floor(timerState.totalMinutesWorked / 60);
+            const minutes = timerState.totalMinutesWorked % 60;
+            
+            document.getElementById('sessionCount').textContent = `Sessions: ${timerState.sessions}`;
+            document.getElementById('totalTime').textContent = `Total: ${hours}h ${minutes}m`;
+            document.getElementById('currentStreak').textContent = `Streak: ${timerState.currentStreak}`;
+        }
+
+        // Custom input validation
+        document.getElementById('customMinutes').addEventListener('input', function(e) {
+            // Only allow numbers
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Limit to 3 digits
+            if (this.value.length > 3) {
+                this.value = this.value.slice(0, 3);
+            }
+            
+            // Limit max value to 180
+            if (parseInt(this.value) > 180) {
+                this.value = '180';
+            }
+        });
+
+        // Event listeners
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+
+        document.getElementById('customMinutes').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                setCustomTimer();
+            }
+        });
+
+        document.getElementById('userNameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                setUserName();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // F11 for fullscreen
+            if (e.key === 'F11') {
+                e.preventDefault();
+                toggleFullscreen();
+            }
+        });
+
+        // Initialize the app
+        initializeApp();
+    </script>
+</body>
+</html>

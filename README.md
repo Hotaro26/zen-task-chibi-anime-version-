@@ -9,5 +9,6 @@ https://zen-task-chibi-anime-version.vercel.app/
  4. Has pomodoro timer with custom placeholder  
  5. Manage to-dos and tasks easily  
  6. Flexible and poppy animation on every click 💮  
- 7. Includes streak, total study time and Tasks  
+ 7. Includes streak, total study time and Tasks
+ 8. *And many still incoming...*
 <img width="1706" height="1006" alt="image" src="https://github.com/user-attachments/assets/fe1fff44-c880-4082-80fc-7111cb4fbacc" />

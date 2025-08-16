@@ -1,3 +1,7 @@
+<p align="center">
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/50d52baa-df43-4ab7-839f-1f3fb336e405" />
+</p>
+
 To visit the website:
 https://zen-task-chibi-anime-version.vercel.app/
 --

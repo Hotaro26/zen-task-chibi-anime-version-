@@ -5,8 +5,7 @@
 To visit the website:
 https://zen-task-chibi-anime-version.vercel.app/
 --
-**FEATURES:**
---
+## **FEATURES:**  
  1. clean,elegent and minimal  
  2. Privacy focused, your data stays with you on your browser as cookies and no one gets access it to neither us  
  3. Great for weeb 😄  

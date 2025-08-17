@@ -1422,6 +1422,7 @@ Zen task(chibi version)</title><link rel="icon" type="image/png" href="chibi.png
 </head>
 <body>
     <script defer src="/_vercel/insights/script.js"></script>
+<canvas id="pipCanvas" width="300" height="100" style="display:none;"></canvas>
 
     <!-- Fullscreen Background Overlay -->
     <div class="fullscreen-bg" id="fullscreenBg"></div>
@@ -1491,6 +1492,10 @@ Zen task(chibi version)</title><link rel="icon" type="image/png" href="chibi.png
             <div class="glass-card">
                 <div class="timer-container">
                     <div class="timer-label" id="timerLabel">Focus Session</div>
+                    <button id="pipBtn" style="background:rgba(24,45,30,.19);border-radius:13px;color:#90EE90;border:none;padding:10px 22px;font-size:1.08em;cursor:pointer;">
+  ⛶ PiP
+</button>
+
                     <div class="timer-display" id="timerDisplay">25:00</div>
                     
                     <div class="timer-progress">
@@ -1545,6 +1550,98 @@ Zen task(chibi version)</title><link rel="icon" type="image/png" href="chibi.png
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
+        // PiP for timer: shows timerDisplay text in always-on-top window
+let pipActive = false;
+
+// Update the PiP canvas with timer info (call every second when running)
+function updatePiPCanvas() {
+  const c = document.getElementById("pipCanvas");
+  if (!c) return;
+  const ctx = c.getContext("2d");
+  c.width = 335; c.height = 106;
+  // --- GLASS BACKGROUND ---
+  // main blur glassy panel
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.save();
+  // Glass gradient Shape
+  const grd = ctx.createLinearGradient(0,0,c.width,c.height);
+  grd.addColorStop(0, "rgba(42, 255, 137, 0.24)");
+  grd.addColorStop(0.42, "rgba(22,32,29,0.57)");
+  grd.addColorStop(1, "rgba(8, 30, 15, 0.32)");
+  ctx.fillStyle = grd;
+  ctx.strokeStyle = "rgba(122,255,152,0.22)";
+  ctx.lineWidth = 3.1;
+  ctx.shadowColor = "rgba(47,255,158,0.15)";
+  ctx.shadowBlur = 13;
+  ctx.beginPath();
+  ctx.moveTo(18,10); ctx.lineTo(c.width-15,10);
+  ctx.quadraticCurveTo(c.width-6,10, c.width-6,25);
+  ctx.lineTo(c.width-6,c.height-16);
+  ctx.quadraticCurveTo(c.width-7,c.height-6,c.width-29,c.height-6);
+  ctx.lineTo(21, c.height-6);
+  ctx.quadraticCurveTo(8,c.height-7, 10, c.height-26);
+  ctx.lineTo(10, 25);
+  ctx.quadraticCurveTo(10,10,18,10);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Frosted noise effect
+  ctx.globalAlpha = 0.16;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*0.9+0.5, 0, 2*Math.PI);
+    ctx.fillStyle = "rgba(255,255,255,"+(Math.random()*0.11+0.04)+")";
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1.0;
+  ctx.restore();
+  // --- TEXT ---
+  ctx.font = "bold 1.15rem Inter,sans-serif";
+  ctx.fillStyle="#97ffb3";
+  ctx.textAlign = "left";
+  ctx.fillText(document.getElementById("timerLabel")?.textContent || "Timer", 31,36);
+  ctx.font = "2.5rem 'JetBrains Mono',monospace";
+  ctx.fillStyle="#fff";
+  ctx.textAlign = "left";
+  ctx.fillText(document.getElementById("timerDisplay")?.textContent || "--:--", 36,85);
+  // Optional: Animate a green progress bar?
+  // const progress = ...;
+  // ctx.fillStyle="#41ffb055"; ctx.fillRect(30,98,Math.floor((c.width-60) * progress),7);
+}
+
+
+// Start PiP
+async function enterPiP(){
+  pipActive = true;
+  updatePiPCanvas();
+  try {
+    await document.getElementById("pipCanvas").requestPictureInPicture();
+  } catch (e) {
+    alert("PiP not supported in your browser");
+    pipActive = false;
+  }
+}
+
+// Exit PiP and cleanup
+function exitPip(){
+  pipActive = false;
+  document.getElementById("pipCanvas").style.display="none";
+}
+
+// Attach to button
+document.getElementById("pipBtn").onclick = function() {
+  if(document.pictureInPictureElement)
+    document.exitPictureInPicture();
+  else
+    enterPiP();
+};
+
+// Handle PiP close
+document.getElementById("pipCanvas").onleavepictureinpicture = exitPip;
+
+// OPTIONAL: If you want live timer updates in PiP, call updatePiPCanvas()
+// from your timer setInterval (every tick)
+
         // User data
         let userData = {
             name: localStorage.getItem('userName') || null

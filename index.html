@@ -1550,31 +1550,7 @@ Zen task(chibi version)</title><link rel="icon" type="image/png" href="chibi.png
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        let pipActive = false;
-
-document.getElementById("pipBtn").onclick = async function() {
-  if (document.pictureInPictureElement) {
-    document.exitPictureInPicture();
-    return;
-  }
-  pipActive = true;
-  updatePiPCanvas(); // Draw glass/timer UI before entering PiP
-  try {
-    await document.getElementById("pipCanvas").requestPictureInPicture();
-  } catch (e) {
-    alert("PiP not supported or can't be opened: " + e);
-    pipActive = false;
-  }
-};
-
-document.getElementById("pipCanvas").onleavepictureinpicture = function() {
-  pipActive = false;
-};
-if (pipActive) updatePiPCanvas();
-
-        // PiP for timer: shows timerDisplay text in always-on-top window
-let pipActive = false;
-
+       
 // Update the PiP canvas with timer info (call every second when running)
 function updatePiPCanvas() {
   const c = document.getElementById("pipCanvas");
